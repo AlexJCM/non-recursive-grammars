@@ -1,0 +1,8 @@
+#my-textarea { 
+  height: 60vh;
+}
+
+#my-table {  
+  height: 70vh;
+  overflow:auto;
+}

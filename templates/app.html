@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Flask App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+      <h3>Recursividad por la izquierda</h3></br>
+  </div>
+
+  <!-- Form -->
+  <div class="container">
+    <form action="/" method="POST">
+      <div class="row">
+        <div class="six columns">
+          <input class="button" type="submit" value="Convertir" id="analyze_btn" />
+          <textarea name="reglas" class="u-full-width" id="my-textarea" placeholder="Ingrese reglas con recursividad">{{ gramatica }}</textarea>
+        </div>
+        <div id="my-table" class="six columns">
+          <table class="u-full-width">
+            <thead>
+              <tr>
+                <th>Reglas generadas sin recursivdad:</th>             
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in resultado %}               
+              <tr>
+                <td>{{item}}</td>
+              </tr>
+              {% endfor %}     
+            </tbody>
+          </table>
+        </div>
+      </div>    
+    </form>
+  </div>
+</body>
+
+</html>
