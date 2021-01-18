@@ -3,42 +3,49 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 # ---------------------ENDPOINTS--------------------------
-@app.route('/')
-def init():
-    return render_template('app.html')
+@app.route('/', methods=['GET', 'POST'])
+def convert_rules():
+    error = None
+    if request.method == 'POST':        
+        data_string = request.form['reglas'] # Obtener los datos desde el formulario html
+        gramatica = data_string.strip() # Eliminar espacios vacos del principio y final de la cadena
 
-@app.route('/', methods=['POST'])
-def convertir_rules():
-    """
-    Entrada esperada:
-        A->A1
-        A->0BC
-    Salida resultante:
-        A->0BCA'
-        A'->1A'
-        A'->λ
-    """
-    if request.method == 'POST':
-        gramatica = request.form['reglas']  # Se obtiene del formulario html
         if gramatica == '':
-            print("La gramatica está vacía")
-            return render_template('app.html', gramatica=gramatica)
+            error = ["La gramática está vacía"]
+            print(error)
+            return render_template('app.html', resultado=error)
 
-        # Guardamos las reglas ingresadas en un arreglo
-        lista_reglas = gramatica.split('\r\n')
-        # eliminar valores vacios del arreglo
-        lista_reglas = [item for item in lista_reglas if item]
+        lista_reglas = gramatica.split('\r\n') # Guardamos las reglas en un arreglo
+        print("lista_reglas", lista_reglas)
+        lista_reglas = [item for item in lista_reglas if item] # Eliminar valores vacíos del arreglo
+         
+        if len(lista_reglas) < 2:
+            error = ['La gramática debe tener dos reglas']
+            print(error)
+            return render_template('app.html', resultado=error)
+
         resultado = generate_non_recursive_rules(lista_reglas)
         return render_template('app.html', resultado=resultado, gramatica=gramatica)
-        
+    else:
+        return render_template('app.html')
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return "Página no encontrada - Error 404", 404
 
 
 # ---------------------FUNCIONES--------------------------
 def generate_non_recursive_rules(lista_reglas):
     resultado = []
     for i in range(0, len(lista_reglas) - 1):
-        ruler = lista_reglas[i].replace(" ", "")  # eliminar espacios en blanco
+        ruler = lista_reglas[i].replace(" ", "")  # Eliminar espacios en blanco
         simbolo_inicial = ruler[0]
+        
+        if len(lista_reglas[i]) < 4:
+            error = ['La gramática está imcompleta']
+            print(error)
+            return render_template('app.html', resultado=error)
 
         # Obtener valores descartados solo de la primera regla
         aux = lista_reglas[0]
@@ -55,7 +62,7 @@ def generate_non_recursive_rules(lista_reglas):
             # 3. Genero una segunda reglaNR, la cual empieza con el simbolo inicial pero concatenado con prima, este contiene
             #    a los simbolos descartados en el paso anterior y finaliza con el simbolo inicial concatenado con prima.
             # 4. Genero una tercera reglaNR, la cual empieza con el simbolo inicial pero concatenado con prima, este solo
-            #    contiene a la cadena vacia.           
+            #    contiene a la cadena vacia.
             if i == 0:
                 next_ruler = lista_reglas[i + 1].replace(" ", "")
                 values_next_ruler = next_ruler[3:]
@@ -63,21 +70,14 @@ def generate_non_recursive_rules(lista_reglas):
                 new_ruler = simbolo_inicial + "->" + values_next_ruler + simbolo_inicial + "'"
                 print("reglaNR 1 = ", new_ruler)
                 resultado.append(new_ruler)
-            
+
             new_ruler = simbolo_inicial + "'" + "->" + descartados + simbolo_inicial + "'"
             print("reglaNR 2 = ", new_ruler)
             resultado.append(new_ruler)
 
-
-    # Generarmos la última regla que contiene la cadena vacia     
+    # Generarmos la última regla que contiene la cadena vacia
     new_ruler = simbolo_inicial + "'" + "->" + 'λ'
     resultado.append(new_ruler)
-    print(resultado)
+    print('resultado = ', resultado)
 
     return resultado
-
-
-# --------------------------------------------------------
-if __name__ == ' __main__':
-    app.debug = True
-    app.run()

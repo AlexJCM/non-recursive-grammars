@@ -32,3 +32,5 @@ _mailinglist
 docs/_build/
 .vscode
 
+#
+static/js

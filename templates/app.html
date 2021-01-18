@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Flask App</title>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" /> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">  
+  <title>Flask App</title>
 </head>
 
 <body>
   <div class="container">
-      <h3>Recursividad por la izquierda</h3></br>
+      <h3>Gramáticas - Recursividad por la izquierda</h3></br>
   </div>
 
   <!-- Form -->
   <div class="container">
-    <form action="/" method="POST">
+    <form action="/" method="POST" id="my-form">
       <div class="row">
         <div class="six columns">
-          <input class="button" type="submit" value="Convertir" id="analyze_btn" />
-          <textarea name="reglas" class="u-full-width" id="my-textarea" placeholder="Ingrese reglas con recursividad">{{ gramatica }}</textarea>
+          <input class="button" id="my-button" type="submit" value="Convertir"/>        
+          <textarea name="reglas" class="u-full-width" id="my-textarea" placeholder="Ingrese reglas con recursividad">{{ gramatica }}</textarea>                                  
         </div>
-        <div id="my-table" class="six columns">
+        <div id="my-tab" class="six columns">
           <table class="u-full-width">
             <thead>
               <tr>
                 <th>Reglas generadas sin recursivdad:</th>             
               </tr>
             </thead>
-            <tbody>
+            <tbody>                       
               {% for item in resultado %}               
               <tr>
                 <td>{{item}}</td>
               </tr>
               {% endfor %}     
             </tbody>
-          </table>
+          </table>          
         </div>
       </div>    
     </form>
-  </div>
+  </div> 
 </body>
-
+<!--<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> -->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<!--<script src="https://cdn.jsdelivr.net/npm/table-to-json@1.0.0/lib/jquery.tabletojson.min.js" integrity="sha256-H8xrCe0tZFi/C2CgxkmiGksqVaxhW0PFcUKZJZo1yNU=" crossorigin="anonymous"></script> -->
+<!--<script src="{{url_for('static', filename = 'js/aux.js')}}"></script> -->
 </html>
